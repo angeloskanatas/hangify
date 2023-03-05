@@ -109,10 +109,10 @@ class _UploadPageState extends State<UploadPage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Column(children: [
-                  const Row(
+                  Row(
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      Text(
+                      const Text(
                         'New post',
                         style: TextStyle(
                           fontSize: 20,

@@ -1,7 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'homepage.dart';
+import 'myprofile.dart';
+import 'settings.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -29,7 +35,7 @@ class _MapPageState extends State<MapPage> {
       'name': 'Retiré at the ERGON House',
       'latitude': 37.97535010321253,
       'longitude': 23.73171933556687,
-      'description': 'Medita'
+      'description': ' A food market, café & restaurant completed with a foodie boutique hotel. A seventh heaven for food enthusiasts.'
     },
     {
       'name': 'Birdman - Japanese Pub + Grill',
@@ -50,67 +56,123 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: initialLocation,
-                  zoom: 15,
-                ),
-                onMapCreated: (GoogleMapController controller) {
-                  mapController = controller;
-                },
-                markers: _markers,
-              ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.settings),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SettingsPage()),
+            );
+          },
+        ),
+        centerTitle: true,
+        title: GestureDetector(
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: const Text(
+            'Hangify',
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'mySofia',
+              fontWeight: FontWeight.w400,
+              fontSize: 25,
+              letterSpacing: 0.01,
+              fontFeatures: [
+                FontFeature.enable('pnum'),
+                FontFeature.enable('lnum')
+              ],
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount:
-                    locations.length, // use the length of the locations list
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    leading: const Icon(Icons.location_on),
-                    title: Text(locations[index]['name']),
-                    subtitle: Text(locations[index]['description']),
-                    onTap: () {
-                      // add the corresponding marker to the map when a search result is tapped
-                      setState(() {
-                        _markers.add(
-                          Marker(
-                            markerId: MarkerId(locations[index]['name']),
-                            position: LatLng(
-                              locations[index]['latitude'],
-                              locations[index]['longitude'],
-                            ),
-                            infoWindow: InfoWindow(
-                              title: locations[index]['name'],
-                            ),
-                          ),
-                        );
-                      });
-                      // move the camera to the selected marker
-                      mapController.animateCamera(
-                        CameraUpdate.newLatLng(
-                          LatLng(
-                            locations[index]['latitude'],
-                            locations[index]['longitude'],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyProfilePage()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+  child: Column(
+    children: [
+      SizedBox(
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: initialLocation,
+            zoom: 15,
+          ),
+          onMapCreated: (GoogleMapController controller) {
+            mapController = controller;
+          },
+          markers: _markers,
         ),
       ),
+      const Text(
+        'Search Results',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Color(0xff6750A4),
+        ),
+      ),
+      Expanded(
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: locations.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: const Icon(Icons.location_on, color: Color(0xff6750A4)),
+              title: Text(locations[index]['name']),
+              subtitle: Text(locations[index]['description']),
+              onTap: () {
+                setState(() {
+                  _markers.add(
+                    Marker(
+                      markerId: MarkerId(locations[index]['name']),
+                      position: LatLng(
+                        locations[index]['latitude'],
+                        locations[index]['longitude'],
+                      ),
+                      infoWindow: InfoWindow(
+                        title: locations[index]['name'],
+                      ),
+                    ),
+                  );
+                });
+                mapController.animateCamera(
+                  CameraUpdate.newLatLng(
+                    LatLng(
+                      locations[index]['latitude'],
+                      locations[index]['longitude'],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    ],
+  ),
+),
+
+
     );
   }
 }

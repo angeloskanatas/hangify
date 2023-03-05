@@ -219,10 +219,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 ),
                               ),
                               const SizedBox(width: 5.0, height: 50.0),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                // ignore: prefer_const_literals_to_create_immutables
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Aggelos Ui/Ux',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,

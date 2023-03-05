@@ -232,10 +232,11 @@ class _OthersProfilePageState extends State<OthersProfilePage> {
                                 ),
                               ),
                               const SizedBox(width: 5.0, height: 50.0),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                // ignore: prefer_const_literals_to_create_immutables
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Johnis',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
